@@ -1,23 +1,84 @@
-import logo from './logo.svg';
+import React from "react";
 import './App.css';
 
-function App() {
+
+
+  function Todo({ todo, index, markTodo }) {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="todo">
+      <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>{todo.text}</span>
+      <div>
+        <button  onClick={() => markTodo(index)}>✓</button>{' '}
+      </div>
+    </div>
+  );
+}
+
+function FormTodo({ addTodo }) {
+  const [value, setValue] = React.useState("");
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    if (!value) return;
+    addTodo(value);
+    setValue("");
+  };
+
+  return (
+    <form onSubmit={handleSubmit}> 
+    <form className="input">
+      <label><b>Add Todo</b></label>
+      <input type="text" className="input" value={value} onChange={e => setValue(e.target.value)} placeholder="Add new todo" />
+    </form>
+    <button type="submit" className="sub">
+      Submit
+    </button>
+  </form>
+  );
+}
+
+function App() {
+  const [todos, setTodos] = React.useState([
+    {
+      text: "sample",
+      isDone: false
+    }
+  ]);
+
+  const addTodo = text => {
+    const newTodos = [...todos, { text }];
+    setTodos(newTodos);
+  };
+
+  const markTodo = index => {
+    const newTodos = [...todos];
+    newTodos[index].isDone = true;
+    setTodos(newTodos);
+  };
+
+ 
+
+  return (
+    <div className="app">
+      <div className="container">
+        <h1 className="text-center mb-4">Todo List</h1>
+        <FormTodo addTodo={addTodo} />
+        <div>
+          {todos.map((todo, index) => (
+            <ol>
+              
+                <Todo
+                key={index}
+                index={index}
+                todo={todo}
+                markTodo={markTodo}
+                
+                />
+            
+            </ol>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
