@@ -3,12 +3,13 @@ import './App.css';
 
 
 
-  function Todo({ todo, index, markTodo }) {
+  function Todo({ todo, index, markTodo, removeTodo }) {
   return (
     <div className="todo">
       <span style={{ textDecoration: todo.isDone ? "line-through" : "" }}>{todo.text}</span>
       <div>
         <button  onClick={() => markTodo(index)}>✓</button>{' '}
+        <button  onClick={() => removeTodo(index)}>✕</button>
       </div>
     </div>
   );
@@ -40,7 +41,7 @@ function FormTodo({ addTodo }) {
 function App() {
   const [todos, setTodos] = React.useState([
     {
-      text: "sample",
+      text: "sample ",
       isDone: false
     }
   ]);
@@ -53,6 +54,12 @@ function App() {
   const markTodo = index => {
     const newTodos = [...todos];
     newTodos[index].isDone = true;
+    setTodos(newTodos);
+  };
+
+  const removeTodo = index => {
+    const newTodos = [...todos];
+    newTodos.splice(index, 1);
     setTodos(newTodos);
   };
 
@@ -72,7 +79,7 @@ function App() {
                 index={index}
                 todo={todo}
                 markTodo={markTodo}
-                
+                removeTodo={removeTodo}
                 />
             
             </ol>
